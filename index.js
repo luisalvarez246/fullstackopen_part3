@@ -1,5 +1,6 @@
 const { json } = require('express');
 const	express = require('express');
+const	morgan = require('morgan');
 const	app = express();
 const	PORT = 3002;
 const	personsUrl = '/api/persons';
@@ -8,6 +9,8 @@ const	url = `http://localhost:${PORT}${personsUrl}`;
 let		persons;
 
 app.use(express.json());
+
+app.use(morgan('tiny'));
 
 persons = 
 [
@@ -110,7 +113,7 @@ app.post(personsUrl, (request, response) =>
 {
 	const	person = request.body;
 	const	error = parseRequest(person);	
-
+	
 	if (error)
 	{
 		return (response.status(400).json({error: error}));
