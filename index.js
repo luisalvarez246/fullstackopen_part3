@@ -1,8 +1,9 @@
 const	express = require('express');
 const	app = express();
 const	PORT = 3002;
-const	personsUrl = '/api/persons'
-const	url = `http://localhost:${PORT}${personsUrl}`
+const	personsUrl = '/api/persons';
+const	infoUrl = '/info';
+const	url = `http://localhost:${PORT}${personsUrl}`;
 let		persons;
 
 persons = 
@@ -29,9 +30,25 @@ persons =
     }
 ]
 
+const formatTime = () =>
+{
+	const now = new Date();
+	const formattedTimestamp = `${now.toDateString()} ${now.toTimeString()}`;
+
+	return (formattedTimestamp);
+}
+
 app.get(personsUrl, (request, response) =>
 {
 	response.json(persons);
+})
+
+app.get(infoUrl, (request, response) =>
+{
+	const	message = `Phonebook has info for ${persons.length} people`
+	const	date = formatTime();
+
+	response.send(`<p>${message}</p><p>${date}</p>`);
 })
 
 app.listen(PORT, () =>
