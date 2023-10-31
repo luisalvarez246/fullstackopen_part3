@@ -1,3 +1,4 @@
+const { json } = require('express');
 const	express = require('express');
 const	app = express();
 const	PORT = 3002;
@@ -5,6 +6,8 @@ const	personsUrl = '/api/persons';
 const	infoUrl = '/info';
 const	url = `http://localhost:${PORT}${personsUrl}`;
 let		persons;
+
+app.use(express.json());
 
 persons = 
 [
@@ -38,6 +41,14 @@ const formatTime = () =>
 	return (formattedTimestamp);
 }
 
+const generateId = () =>
+{
+	const personsMaxId = Math.max(...persons.map(person => person.id));
+	const id = Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER - personsMaxId + 1)) + personsMaxId;
+
+	return (id);
+};
+
 app.get(personsUrl, (request, response) =>
 {
 	response.json(persons);
@@ -66,6 +77,17 @@ app.delete(`${personsUrl}/:id`, (request, response) =>
 	persons = persons.filter(person => person.id !== id);
 	response.status(204).end();
 })
+
+app.post(personsUrl, (request, response) =>
+{
+	const	person = request.body;
+
+	console.log(person);
+	person.id = generateId();
+	persons = persons.concat(person);
+	response.json(person);
+})
+
 
 app.get(infoUrl, (request, response) =>
 {
