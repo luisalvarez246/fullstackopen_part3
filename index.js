@@ -59,6 +59,14 @@ app.get(`${personsUrl}/:id`, (request, response) =>
 	}
 })
 
+app.delete(`${personsUrl}/:id`, (request, response) =>
+{
+	const	id = Number(request.params.id);
+	
+	persons = persons.filter(person => person.id !== id);
+	response.status(204).end();
+})
+
 app.get(infoUrl, (request, response) =>
 {
 	const	message = `Phonebook has info for ${persons.length} people`
