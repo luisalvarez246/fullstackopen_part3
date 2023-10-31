@@ -49,6 +49,34 @@ const generateId = () =>
 	return (id);
 };
 
+const parseRequest = (body) =>
+{
+	let error;
+
+	if (!body.name && !body.number)
+	{
+		error = 'name AND/OR number must not be empty';
+	}
+	else if (!body.name)
+	{
+		error ='name must not be empty';
+	}
+	else if (!body.number)
+	{
+		error ='number must not be empty';
+	}
+	else if (persons.find(person => person.name === body.name))
+	{
+		error = 'name must be unique';
+	}
+	else
+	{
+		error = null;
+	}
+	return (error);
+
+};
+
 app.get(personsUrl, (request, response) =>
 {
 	response.json(persons);
@@ -81,8 +109,12 @@ app.delete(`${personsUrl}/:id`, (request, response) =>
 app.post(personsUrl, (request, response) =>
 {
 	const	person = request.body;
+	const	error = parseRequest(person);	
 
-	console.log(person);
+	if (error)
+	{
+		return (response.status(400).json({error: error}));
+	}
 	person.id = generateId();
 	persons = persons.concat(person);
 	response.json(person);
