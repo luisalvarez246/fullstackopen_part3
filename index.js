@@ -43,6 +43,22 @@ app.get(personsUrl, (request, response) =>
 	response.json(persons);
 })
 
+app.get(`${personsUrl}/:id`, (request, response) =>
+{
+	const	id = Number(request.params.id);
+	const	person = persons.find(person => person.id === id);
+
+	if (person)
+	{
+		response.json(person);
+	}
+	else
+	{
+		response.status(404);
+		response.send(`person with id ${id} not found`);
+	}
+})
+
 app.get(infoUrl, (request, response) =>
 {
 	const	message = `Phonebook has info for ${persons.length} people`
