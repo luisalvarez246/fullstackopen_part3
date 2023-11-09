@@ -10,6 +10,7 @@ const	url = `http://localhost:${PORT}${personsUrl}`;
 let		persons;
 
 app.use(cors());
+app.use(express.static('dist'));
 app.use(express.json());
 
 morgan.token('data', (request) =>
