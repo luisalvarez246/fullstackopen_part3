@@ -7,8 +7,11 @@ const	PORT = process.env.PORT || 3002;
 const	personsUrl = '/api/persons';
 const	infoUrl = '/info';
 const	url = `http://localhost:${PORT}${personsUrl}`;
-let		persons;
+// let		persons;
+const	db = require('./db');
+const	Person = require('./models/Person');
 
+db.connectDB();
 app.use(cors());
 app.use(express.static('dist'));
 app.use(express.json());
@@ -20,29 +23,29 @@ morgan.token('data', (request) =>
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 
-persons = 
-[
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
+// persons = 
+// [
+//     { 
+//       "id": 1,
+//       "name": "Arto Hellas", 
+//       "number": "040-123456"
+//     },
+//     { 
+//       "id": 2,
+//       "name": "Ada Lovelace", 
+//       "number": "39-44-5323523"
+//     },
+//     { 
+//       "id": 3,
+//       "name": "Dan Abramov", 
+//       "number": "12-43-234345"
+//     },
+//     { 
+//       "id": 4,
+//       "name": "Mary Poppendieck", 
+//       "number": "39-23-6423122"
+//     }
+// ]
 
 const formatTime = () =>
 {
@@ -88,9 +91,18 @@ const parseRequest = (body) =>
 
 };
 
-app.get(personsUrl, (request, response) =>
+app.get(personsUrl, async (request, response) =>
 {
-	response.json(persons);
+	try
+	{
+		const	result = await Person.find({});
+
+		response.json(result);
+	}
+	catch(error)
+	{
+		console.log(`Could not fetch persons: ${error}`);
+	}
 })
 
 app.get(`${personsUrl}/:id`, (request, response) =>
