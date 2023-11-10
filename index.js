@@ -63,9 +63,10 @@ const generateId = () =>
 	return (id);
 };
 
-const parseRequest = (body) =>
+const parseRequest = async (body) =>
 {
-	let error;
+	let		error;
+	const	isInDB = await Person.find({name: body.name});
 
 	if (!body.name && !body.number)
 	{
@@ -79,7 +80,7 @@ const parseRequest = (body) =>
 	{
 		error ='number must not be empty';
 	}
-	else if (persons.find(person => person.name === body.name))
+	else if (isInDB.length > 0)
 	{
 		error = 'name must be unique';
 	}
@@ -135,18 +136,30 @@ app.delete(`${personsUrl}/:id`, (request, response) =>
 	response.status(204).end();
 })
 
-app.post(personsUrl, (request, response) =>
+app.post(personsUrl, async (request, response) =>
 {
-	const	person = request.body;
-	const	error = parseRequest(person);	
-	
+	const	body = request.body;
+	const	error = await parseRequest(body);	
+	const	person = new Person(
+	{
+		name: body.name,
+		number: body.number
+	})
+
 	if (error)
 	{
+		console.log('enters here');
 		return (response.status(400).json({error: error}));
 	}
-	person.id = generateId();
-	persons = persons.concat(person);
-	response.json(person);
+	try
+	{
+		const savedNote = await person.save();
+		response.json(savedNote);
+	}
+	catch(error)
+	{
+		console.log(`Error saving note: ${error}`);
+	}
 })
 
 
