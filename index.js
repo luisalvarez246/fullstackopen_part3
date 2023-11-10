@@ -105,19 +105,25 @@ app.get(personsUrl, async (request, response) =>
 	}
 })
 
-app.get(`${personsUrl}/:id`, (request, response) =>
+app.get(`${personsUrl}/:id`, async (request, response) =>
 {
-	const	id = Number(request.params.id);
-	const	person = persons.find(person => person.id === id);
-
-	if (person)
+	const	id = request.params.id;
+	try
 	{
-		response.json(person);
+		const	person = await Person.findById(id);
+		if (person)
+		{
+			response.json(person);
+		}
+		else
+		{
+			response.status(404);
+			response.send(`person with id ${id} not found`);
+		}
 	}
-	else
+	catch(error)
 	{
-		response.status(404);
-		response.send(`person with id ${id} not found`);
+		console.log(`Could not fetch person: ${error}`);
 	}
 })
 
