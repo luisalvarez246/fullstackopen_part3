@@ -43,17 +43,30 @@ const	savePerson = async () =>
 	}
 }
 
-// if (process.argv.length === 3)
-// {
-// 	console.log('give password as argument!');
-// 	process.exit(1);
-// }
+const	getAllPersons = async () =>
+{
+	try
+	{
+		const result = await Person.find({});
+
+		result.forEach(person => 
+		{
+			console.log(person);
+		});
+		mongoose.connection.close();
+	}
+	catch (error)
+	{
+		console.log(`Could not fetch records: ${error}`);
+	}
+}
+
+if (process.argv.length === 3)
+{
+	getAllPersons();
+}
 
 if (process.argv.length === 5)
 {
 	savePerson();
 }
-
-// const	number = Number(process.argv[4]);
-// if (number)
-// 	console.log(number);
