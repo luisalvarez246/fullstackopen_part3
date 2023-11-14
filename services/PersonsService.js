@@ -99,6 +99,21 @@ const savePerson = async (request, response) =>
 	}
 }
 
+const deletePerson = async(request, response, next) =>
+{
+	const	id = request.params.id;
+	
+	try
+	{
+		await Person.findByIdAndDelete(id)
+		response.status(204).end();
+	}
+	catch(error)
+	{
+		next(error);
+	}
+}
+
 const getInfo = async (request, response) =>
 {
 	const	message = `Phonebook has info for ${persons.length} people`
@@ -107,4 +122,4 @@ const getInfo = async (request, response) =>
 	response.send(`<p>${message}</p><p>${date}</p>`);
 }
 
-module.exports = { getAllPersons, getPersonById, savePerson, getInfo };
+module.exports = { getAllPersons, getPersonById, savePerson, getInfo, deletePerson };
