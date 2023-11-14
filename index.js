@@ -9,7 +9,7 @@ const	infoUrl = '/info';
 const	url = `http://localhost:${PORT}${personsUrl}`;
 const	db = require('./db');
 const	personsService = require('./services/PersonsService');
-const	middleware = require('./middleware/errorHandler');
+const	middleware = require('./middleware/middleware');
 
 db.connectDB();
 app.use(cors());
@@ -51,6 +51,7 @@ app.get(infoUrl, async (request, response) =>
 	await personsService.getInfo(request, response);
 })
 
+app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
 app.listen(PORT, () =>
