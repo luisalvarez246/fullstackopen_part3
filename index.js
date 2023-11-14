@@ -9,6 +9,7 @@ const	infoUrl = '/info';
 const	url = `http://localhost:${PORT}${personsUrl}`;
 const	db = require('./db');
 const	personsService = require('./services/PersonsService');
+const	middleware = require('./middleware/errorHandler');
 
 db.connectDB();
 app.use(cors());
@@ -22,22 +23,14 @@ morgan.token('data', (request) =>
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 
-const formatTime = () =>
-{
-	const now = new Date();
-	const formattedTimestamp = `${now.toDateString()} ${now.toTimeString()}`;
-
-	return (formattedTimestamp);
-}
-
 app.get(personsUrl, async (request, response) => 
 {
 	await personsService.getAllPersons(request, response);
 })
 
-app.get(`${personsUrl}/:id`, async (request, response) => 
+app.get(`${personsUrl}/:id`, async (request, response, next) => 
 {
-	await personsService.getPersonById(request, response);
+	await personsService.getPersonById(request, response, next);
 })
 
 app.delete(`${personsUrl}/:id`, (request, response) =>
@@ -53,13 +46,12 @@ app.post(personsUrl, async (request, response) =>
 	await personsService.savePerson(request, response);
 })
 
-app.get(infoUrl, (request, response) =>
+app.get(infoUrl, async (request, response) =>
 {
-	const	message = `Phonebook has info for ${persons.length} people`
-	const	date = formatTime();
-
-	response.send(`<p>${message}</p><p>${date}</p>`);
+	await personsService.getInfo(request, response);
 })
+
+app.use(middleware.errorHandler);
 
 app.listen(PORT, () =>
 {

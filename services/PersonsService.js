@@ -1,5 +1,13 @@
 const	Person = require('../models/Person');
 
+const formatTime = () =>
+{
+	const now = new Date();
+	const formattedTimestamp = `${now.toDateString()} ${now.toTimeString()}`;
+
+	return (formattedTimestamp);
+}
+
 const parseRequest = async (body) =>
 {
 	let		error;
@@ -43,7 +51,7 @@ const getAllPersons = async (request, response) =>
 	}
 }
 
-const getPersonById = async (request, response) =>
+const getPersonById = async (request, response, next) =>
 {
 	const	id = request.params.id;
 	try
@@ -61,7 +69,7 @@ const getPersonById = async (request, response) =>
 	}
 	catch(error)
 	{
-		console.log(`Could not fetch person: ${error}`);
+		next(error);
 	}
 }
 
@@ -91,4 +99,12 @@ const savePerson = async (request, response) =>
 	}
 }
 
-module.exports = { getAllPersons, getPersonById, savePerson };
+const getInfo = async (request, response) =>
+{
+	const	message = `Phonebook has info for ${persons.length} people`
+	const	date = formatTime();
+
+	response.send(`<p>${message}</p><p>${date}</p>`);
+}
+
+module.exports = { getAllPersons, getPersonById, savePerson, getInfo };
