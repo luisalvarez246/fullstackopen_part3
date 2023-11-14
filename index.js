@@ -33,12 +33,9 @@ app.get(`${personsUrl}/:id`, async (request, response, next) =>
 	await personsService.getPersonById(request, response, next);
 })
 
-app.delete(`${personsUrl}/:id`, (request, response) =>
+app.delete(`${personsUrl}/:id`, async (request, response, next) =>
 {
-	const	id = Number(request.params.id);
-	
-	persons = persons.filter(person => person.id !== id);
-	response.status(204).end();
+	await personsService.deletePerson(request, response, next);
 })
 
 app.post(personsUrl, async (request, response) => 
