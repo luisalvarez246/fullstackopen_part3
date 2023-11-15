@@ -138,7 +138,17 @@ const updatePerson = async(request, response, next) =>
 
 const getInfo = async (request, response) =>
 {
-	const	message = `Phonebook has info for ${persons.length} people`
+	let	result;
+	try
+	{
+		result = await Person.find({});
+	}
+	catch(error)
+	{
+		console.log(`Could not fetch persons: ${error}`);
+		response.status(500).end()
+	}
+	const	message = `Phonebook has info for ${result.length} people`
 	const	date = formatTime();
 
 	response.send(`<p>${message}</p><p>${date}</p>`);
