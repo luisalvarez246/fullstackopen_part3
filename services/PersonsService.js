@@ -114,6 +114,28 @@ const deletePerson = async(request, response, next) =>
 	}
 }
 
+const updatePerson = async(request, response, next) =>
+{
+	const	id = request.params.id;
+	const	body = request.body;
+	const	person = 
+	{
+		name: body.name,
+		number: body.number
+	}
+	
+	try
+	{
+		const updatedPerson = await Person.findByIdAndUpdate(id, person, {new: true});
+		
+		response.json(updatedPerson);
+	}
+	catch(error)
+	{
+		next(error);
+	}
+}
+
 const getInfo = async (request, response) =>
 {
 	const	message = `Phonebook has info for ${persons.length} people`
@@ -122,4 +144,4 @@ const getInfo = async (request, response) =>
 	response.send(`<p>${message}</p><p>${date}</p>`);
 }
 
-module.exports = { getAllPersons, getPersonById, savePerson, getInfo, deletePerson };
+module.exports = { getAllPersons, getPersonById, savePerson, getInfo, deletePerson, updatePerson };
