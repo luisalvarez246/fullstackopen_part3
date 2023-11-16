@@ -73,7 +73,7 @@ const getPersonById = async (request, response, next) =>
 	}
 }
 
-const savePerson = async (request, response) =>
+const savePerson = async (request, response, next) =>
 {
 	const	body = request.body;
 	const	error = await parseRequest(body);	
@@ -95,7 +95,7 @@ const savePerson = async (request, response) =>
 	}
 	catch(error)
 	{
-		console.log(`Error saving note: ${error}`);
+		next(error);
 	}
 }
 

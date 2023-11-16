@@ -38,9 +38,9 @@ app.delete(`${personsUrl}/:id`, async (request, response, next) =>
 	await personsService.deletePerson(request, response, next);
 })
 
-app.post(personsUrl, async (request, response) => 
+app.post(personsUrl, async (request, response, next) => 
 {
-	await personsService.savePerson(request, response);
+	await personsService.savePerson(request, response, next);
 })
 
 app.put(`${personsUrl}/:id`, async (request, response) => 
