@@ -126,7 +126,7 @@ const updatePerson = async(request, response, next) =>
 	
 	try
 	{
-		const updatedPerson = await Person.findByIdAndUpdate(id, person, {new: true});
+		const updatedPerson = await Person.findByIdAndUpdate(id, person, {new: true, runValidators: true, context: 'query'});
 		
 		response.json(updatedPerson);
 	}

@@ -43,9 +43,9 @@ app.post(personsUrl, async (request, response, next) =>
 	await personsService.savePerson(request, response, next);
 })
 
-app.put(`${personsUrl}/:id`, async (request, response) => 
+app.put(`${personsUrl}/:id`, async (request, response, next) => 
 {
-	await personsService.updatePerson(request, response);
+	await personsService.updatePerson(request, response, next);
 })
 
 app.get(infoUrl, async (request, response) =>
