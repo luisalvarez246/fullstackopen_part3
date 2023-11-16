@@ -1,4 +1,5 @@
 const	mongoose = require('mongoose');
+const	validators = require('../validators/customValidators');
 
 const	personSchema = new mongoose.Schema(
 {
@@ -8,7 +9,16 @@ const	personSchema = new mongoose.Schema(
 		minLength: 3,
 		required: true
 	},
-	number: Number,
+	number: 
+	{
+		type: String,
+		required: true,
+		validate:
+		{
+			validator: validators.phoneNumberValidator,
+			message: 'Please enter a valid phone number (e.g., 09-123456, 058-123456)'
+		}
+	}
 })
 
 personSchema.set('toJSON', 
