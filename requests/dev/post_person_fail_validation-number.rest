@@ -2,6 +2,6 @@ POST http://localhost:3002/api/persons
 Content-Type: application/json
 
 {
-	"name": "to delete",
-	"number": "222-4146884"
+	"name": "turco",
+	"number": "058-23219"
 }
