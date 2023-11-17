@@ -78,10 +78,10 @@ const savePerson = async (request, response, next) =>
 	const	body = request.body;
 	const	error = await parseRequest(body);	
 	const	person = new Person(
-	{
-		name: body.name,
-		number: body.number
-	})
+		{
+			name: body.name,
+			number: body.number
+		})
 
 	if (error)
 	{

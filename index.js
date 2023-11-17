@@ -1,4 +1,4 @@
-const { json, request } = require('express');
+/* eslint-disable no-undef */
 const	express = require('express');
 const	morgan = require('morgan');
 const	cors = require('cors');
@@ -59,5 +59,5 @@ app.use(middleware.errorHandler);
 app.listen(PORT, () =>
 {
 	console.log(`Server Successfully Started on port ${PORT}`);
-	console.log(`Go to: %c ${url}`, "color: blue;");
+	console.log(`Go to: %c ${url}`, 'color: blue;');
 });
